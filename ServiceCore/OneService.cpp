@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "OneService.h"
+#include "ServiceCoreStub.h"
+#include "ServiceControlImpl.h"
 #include <grpcpp/grpcpp.h>
 
-OneService::OneService(const CString& tokenKey)
+OneService::OneService(const std::string& token, const std::string& serviceName, int mPort, const std::string& mHost, int sPort, uint32_t security, uint32_t type):
+	m_strToken(token), m_strServiceName(serviceName), m_mPort(mPort), m_mHost(mHost),m_sPort(sPort), m_security(security), m_type(type)
 {
 
 }
@@ -23,9 +26,32 @@ BOOL OneService::InitInstance()
 	if (!InitCommunication())
 		return FALSE;
 
+	std::string addr = "0.0.0.0:";
+	addr += std::to_string(m_sPort);
 	m_pBuilder.reset(new grpc::ServerBuilder);
-	m_pBuilder->AddListeningPort(std::string("0.0.0.0:1403"), grpc::InsecureServerCredentials());
+	m_pBuilder->AddListeningPort(addr, grpc::InsecureServerCredentials());
+
+	m_pServiceControl.reset(new ServiceControlImpl);
+	m_pBuilder->RegisterService(m_pServiceControl.get());
 	return TRUE;
+}
+
+void OneService::KeepAlive()
+{
+	One::KeepAlive keepAlive;
+	int seq = 1;
+	keepAlive.set_status("OK");
+	while(true)
+	{
+		keepAlive.set_seq(seq++);
+		if (!m_pStub->ServiceKeepAlive(keepAlive))
+			break;
+		printf("KeepAlive ...\n");
+		Sleep(2000);
+	}
+
+	// Main service die, Restart service
+	Stop();
 }
 
 void OneService::Run()
@@ -33,8 +59,10 @@ void OneService::Run()
 	if (!ValidateService())
 		return;
 
-	m_pServer = std::move(m_pBuilder->BuildAndStart());
+	std::thread th(&OneService::KeepAlive, this);
+	th.detach();
 
+	m_pServer = std::move(m_pBuilder->BuildAndStart());
 	m_pServer->Wait();
 }
 
@@ -76,10 +104,33 @@ void OneService::StartServer(OneService*& pService)
 
 BOOL OneService::InitCommunication()
 {
+	std::string target = m_mHost;
+	target += ":";
+	target += std::to_string(m_mPort);
+	m_pStub.reset(new ServiceCoreStub(grpc::CreateChannel(target, grpc::InsecureChannelCredentials())));
+	m_pStub->InitContext(m_strToken);
+
 	return TRUE;
 }
 
 BOOL OneService::ValidateService()
 {
+	One::ServiceInfo info;
+	info.set_servicename(m_strServiceName);
+	info.set_bindport(m_sPort);
+	info.set_description(m_strDescriptions);
+	info.set_url("localhost");
+	info.set_apiinfo("This API query data from Server OPCUA");
+	info.set_apiversion(1);
+	info.set_license("ATS-License 4.0");
+	info.set_type(m_type);
+	info.set_security(m_security);
+	//std::string m_strToken;
+	
+	uint32_t m_security{0};
+	uint32_t m_type{0};
+	if (!m_pStub->RegisterService(info))
+		return FALSE;
+
 	return TRUE;
 }

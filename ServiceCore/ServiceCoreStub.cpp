@@ -4,7 +4,6 @@
 ServiceCoreStub::ServiceCoreStub(std::shared_ptr<grpc::Channel> channel):
 	_pStub(One::CoreService::NewStub(channel))
 {
-	channel_ = channel;
 }
 
 ServiceCoreStub::~ServiceCoreStub()
@@ -12,29 +11,31 @@ ServiceCoreStub::~ServiceCoreStub()
 
 }
 
-bool ServiceCoreStub::RegisterService()
+bool ServiceCoreStub::RegisterService(const One::ServiceInfo& servieInfo)
 {
-	grpc_connectivity_state st = channel_->GetState(true);
-	One::ServiceInfo servieInfo;
+	grpc::ClientContext context;
+	context.AddMetadata("token", _token);
 	google::protobuf::BoolValue ret;
-	_pStub->RegisterService(&context, servieInfo, &ret);
+	auto status = _pStub->RegisterService(&context, servieInfo, &ret);
+	if (status.ok() && ret.value())
+		return true;
 
-	return true;
+	return false;
 }
 
-bool ServiceCoreStub::ServiceKeepAlive()
+bool ServiceCoreStub::ServiceKeepAlive(const One::KeepAlive& keepAlive)
 {
-	grpc_connectivity_state st = channel_->GetState(true);
-	context.AddMetadata("token", "abcd");
-	One::KeepAlive keepAlive;
-	
+	grpc::ClientContext context;
+	context.AddMetadata("token", _token);
 	google::protobuf::BoolValue ret;
-	_pStub->ServiceKeepAlive(&context, keepAlive, &ret);
-
-	return true;
+	auto status = _pStub->KeepAliveService(&context, keepAlive, &ret);
+	if (status.ok() && ret.value())
+		return true;
+	
+	return false;
 }
 
 void ServiceCoreStub::InitContext(const std::string& token)
 {
-	context.AddMetadata("token", token);
+	_token = token;
 }

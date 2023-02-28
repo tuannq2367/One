@@ -51,7 +51,7 @@ CServiceCoreApp::CServiceCoreApp()
 
 // The one and only CServiceCoreApp object
 
-CServiceCoreApp theApp;
+//CServiceCoreApp theApp;
 
 
 // CServiceCoreApp initialization
