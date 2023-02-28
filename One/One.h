@@ -9,7 +9,7 @@
 #endif
 
 #include "resource.h"		// main symbols
-
+#include "CCommandParse.h"
 
 // OneApp:
 // See One.cpp for the implementation of this class
@@ -23,10 +23,14 @@ public:
 // Overrides
 public:
 	virtual BOOL InitInstance();
-
+	virtual int Run();
 // Implementation
 
 	DECLARE_MESSAGE_MAP()
+private:
+	BOOL InitService();
+	BOOL InitMain();
+	CCommandParse m_cmdParse;
 };
 
 extern OneApp theApp;
