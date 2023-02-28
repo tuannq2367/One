@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+package One;
+
+// Definition of response message
+message KeepAlive {
+    string status = 1;
+	int64 seq = 2;
+}
+
+message ServiceInfo {
+	string serviceName = 1;
+	int32 bindPort = 2;
+	string url = 3;
+	int32 type = 4;
+	string description = 5;
+	string license = 6;
+	int32 apiVersion = 7;
+	string apiInfo =8;
+	int32 security = 9;
+}
+
+// Definition of service
+service CoreService {
+	rpc KeepAliveService(KeepAlive ) returns(.google.protobuf.BoolValue){}
+	rpc RegisterService(ServiceInfo ) returns (.google.protobuf.BoolValue){}
+}
+
+service ServiceControl {
+	rpc Shutdown(.google.protobuf.Int32Value) returns (.google.protobuf.BoolValue){}
+	rpc QueryState(.google.protobuf.Empty) returns (.google.protobuf.Int32Value){}
+}
