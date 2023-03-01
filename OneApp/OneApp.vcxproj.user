@@ -4,7 +4,7 @@
     <RESOURCE_FILE>OneApp.rc</RESOURCE_FILE>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments>service</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-mode=app</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

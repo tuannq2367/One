@@ -46,7 +46,7 @@ void OneService::KeepAlive()
 		keepAlive.set_seq(seq++);
 		if (!m_pStub->ServiceKeepAlive(keepAlive))
 			break;
-		printf("KeepAlive ...\n");
+		//printf("KeepAlive ...\n");
 		Sleep(2000);
 	}
 
@@ -83,7 +83,7 @@ void OneService::Stop()
 	m_pServer.reset();
 }
 
-void OneService::StartServer(OneService*& pService)
+void OneService::StartService(OneService*& pService)
 {
 	if (!pService)
 		return;

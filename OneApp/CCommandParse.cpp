@@ -34,12 +34,7 @@ BOOL ParseKeyValue(const std::string& input, std::string& key, std::string& valu
 	if (equalSignPos == -1)
 		return FALSE;
 
-	int keyStart = input.find("-");
-	if (keyStart == -1)
-		return FALSE;
-
-	keyStart += 1;
-	key = input.substr(keyStart, equalSignPos - keyStart);
+	key = input.substr(0, equalSignPos);
 	value = input.substr(equalSignPos + 1);
 	return TRUE;
 }

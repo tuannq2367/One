@@ -13,6 +13,9 @@
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
+#define EXE_PATH L"C:\\Workspaces\\One\\Debug64\\OneAppD.exe"
+#else
+#define EXE_PATH L"C:\\Workspaces\\One\\Debug64\\OneApp.exe"
 #endif
 
 #define WM_SERVICE_MODIFY 1110
@@ -139,6 +142,7 @@ BEGIN_MESSAGE_MAP(ServiceManagerDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BTN_NEW_SERVICE, &ServiceManagerDlg::OnBnClickedBtnNewService)
 	ON_MESSAGE(WM_SERVICE_MODIFY, &ServiceManagerDlg::OnServiceModify)
+	ON_BN_CLICKED(IDC_BUTTON_NEW_APP, &ServiceManagerDlg::OnBnClickedButtonNewApp)
 END_MESSAGE_MAP()
 
 
@@ -203,7 +207,7 @@ void ServiceManagerDlg::OnBnClickedBtnNewService()
 
 	std::wstring szServName(m_strNewServiceName.GetString());
 	std::string servName = _convert.to_bytes(szServName.c_str());
-	GetServiceManager()->StartService(servName, m_bindPort);
+	GetServiceManager()->StartProgram(EXE_PATH,servName, m_bindPort);
 }
 
 
@@ -286,4 +290,11 @@ afx_msg LRESULT ServiceManagerDlg::OnServiceModify(WPARAM wParam, LPARAM lParam)
 		UpdateItem(*pInfo);
 	}
 	return 0;
+}
+
+
+void ServiceManagerDlg::OnBnClickedButtonNewApp()
+{
+	// TODO: Add your control notification handler code here
+	
 }

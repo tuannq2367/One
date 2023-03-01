@@ -40,13 +40,14 @@ OneApp::OneApp()
 BOOL OneApp::InitInstance()
 {
 	ParseCommandLine(m_cmdParse);
-	if (m_cmdParse.CheckParam("app"))
-	{
-		return InitMain();
-	}
-	else if (m_cmdParse.CheckParam("service"))
+	
+	if (m_cmdParse.CheckParam("service"))
 	{
 		return InitService();
+	}
+	else
+	{
+		return InitMain();
 	}
 }
 

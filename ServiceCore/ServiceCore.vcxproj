@@ -93,7 +93,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;SERVICE_CORE_IMPL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;SERVICE_CORE_IMPL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -196,6 +196,7 @@
     <ClCompile Include="..\proto\ServiceCore.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="CoreServiceImpl.cpp" />
     <ClCompile Include="OneService.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -206,13 +207,19 @@
     <ClCompile Include="ServiceControlImpl.cpp" />
     <ClCompile Include="ServiceCore.cpp" />
     <ClCompile Include="ServiceCoreStub.cpp" />
+    <ClCompile Include="ServiceEntryPoint.cpp" />
+    <ClCompile Include="ServicesManager.cpp" />
+    <ClCompile Include="TokenPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\ServiceCore.rc2" />
     <None Include="ServiceCore.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CoreServiceImpl.h" />
+    <ClInclude Include="CoreServiceInfo.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Observers.h" />
     <ClInclude Include="OneService.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
@@ -220,7 +227,10 @@
     <ClInclude Include="ServiceCore.h" />
     <ClInclude Include="ServiceCoreExport.h" />
     <ClInclude Include="ServiceCoreStub.h" />
+    <ClInclude Include="ServiceEntryPoint.h" />
+    <ClInclude Include="ServicesManager.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TokenPool.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ServiceCore.rc" />

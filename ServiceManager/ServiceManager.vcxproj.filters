@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="proto">
-      <UniqueIdentifier>{a5ebbd04-d137-41e3-8906-7ec05e7dbb47}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ManagerApp.h">
@@ -36,27 +33,6 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\proto\ServiceCore.grpc.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
-    <ClInclude Include="..\proto\ServiceCore.pb.h">
-      <Filter>proto</Filter>
-    </ClInclude>
-    <ClInclude Include="CoreServiceImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ServicesManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TokenPool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoreServiceInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Observers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ManagerApp.cpp">
@@ -66,21 +42,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\proto\ServiceCore.grpc.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
-    <ClCompile Include="..\proto\ServiceCore.pb.cc">
-      <Filter>proto</Filter>
-    </ClCompile>
-    <ClCompile Include="CoreServiceImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ServicesManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TokenPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,4 +4,7 @@
     <LocalDebuggerCommandArguments>app -mPort=1403 -mHost=127.0.0.1 -sPort=1101 -sec=0 -type=1</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup>
+    <RESOURCE_FILE>One.rc</RESOURCE_FILE>
+  </PropertyGroup>
 </Project>

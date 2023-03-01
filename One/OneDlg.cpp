@@ -3,7 +3,6 @@
 //
 
 #include "pch.h"
-#include "framework.h"
 #include "One.h"
 #include "OneDlg.h"
 #include "afxdialogex.h"
@@ -31,6 +30,7 @@ void OneDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(OneDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON_ADD_SERVICE, &OneDlg::OnBnClickedButtonAddService)
 END_MESSAGE_MAP()
 
 
@@ -86,3 +86,9 @@ HCURSOR OneDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void OneDlg::OnBnClickedButtonAddService()
+{
+	// TODO: Add your control notification handler code here
+}

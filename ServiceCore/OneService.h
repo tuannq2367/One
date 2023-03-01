@@ -12,9 +12,11 @@ namespace grpc
 
 class ServiceCoreStub;
 class ServiceControlImpl;
+class ServicesManager;
 
 class ServiceCore_Class OneService
 {
+	friend class ServiceManager;
 public:
 	OneService(const std::string& token, const std::string& serviceName, int mPort, const std::string& mHost, int sPort, uint32_t security, uint32_t type);
 	~OneService();
@@ -26,7 +28,7 @@ public:
 	virtual BOOL ExitInitInstance();
 	void Stop();
 
-	static void StartServer(OneService*& pService);
+	static void StartService(OneService*& pService);
 protected:
 	BOOL ValidateService();
 	BOOL InitCommunication();
@@ -44,7 +46,6 @@ private:
 	std::unique_ptr <grpc::ServerBuilder> m_pBuilder;
 	std::unique_ptr<ServiceCoreStub> m_pStub;
 	std::unique_ptr<ServiceControlImpl> m_pServiceControl;
-	friend class ServiceManager;
 	virtual void Run();
 };
 

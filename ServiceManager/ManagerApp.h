@@ -15,13 +15,6 @@
 // See ServiceManager.cpp for the implementation of this class
 //
 
-namespace grpc
-{
-	class ServerBuilder;
-	class Server;
-}
-class CoreServiceImpl;
-
 class ManagerApp : public CWinApp
 {
 public:
@@ -36,9 +29,6 @@ public:
 	DECLARE_MESSAGE_MAP()
 private:
 	void InitService();
-	std::unique_ptr<CoreServiceImpl> m_pServiceImpl;
-	std::unique_ptr <grpc::Server> m_pServer;
-	std::unique_ptr <grpc::ServerBuilder> m_pBuilder;
 };
 
 extern ManagerApp theApp;

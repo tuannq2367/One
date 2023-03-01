@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	parse.GetParam("type", tmp);
 	type = std::stoul(tmp);
     OneService* pService = new OneService(token, name, mPort, mHost,sPort , security, type);
-    OneService::StartServer(pService);
+    OneService::StartServiceW(pService);
     return 0;
 }
 

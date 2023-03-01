@@ -46,4 +46,6 @@ private:
 	int m_bindPort;
 protected:
 	afx_msg LRESULT OnServiceModify(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnBnClickedButtonNewApp();
 };

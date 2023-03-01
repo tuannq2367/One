@@ -7,7 +7,6 @@
 #include "ManagerApp.h"
 #include "ServicesManager.h"
 #include "ServiceManagerDlg.h"
-#include "CoreServiceImpl.h"
 
 #include <grpcpp/grpcpp.h>
 
@@ -112,7 +111,7 @@ BOOL ManagerApp::InitInstance()
 
 int ManagerApp::ExitInstance()
 {
-	m_pServer->Shutdown();
+	GetServiceManager()->StopEntryPoint();
 	ServicesManager::Destroy();
 
 	return CWinApp::ExitInstance();
@@ -120,21 +119,6 @@ int ManagerApp::ExitInstance()
 
 void ManagerApp::InitService()
 {
-	if (!m_pBuilder)
-	{
-		m_pBuilder.reset(new grpc::ServerBuilder);
-	}
-
-	if (!m_pServiceImpl)
-	{
-		m_pServiceImpl.reset(new CoreServiceImpl(GetServiceManager()));
-	}
-
-	m_pBuilder->AddListeningPort(std::string("0.0.0.0:1403"), grpc::InsecureServerCredentials());
-	m_pBuilder->RegisterService(m_pServiceImpl.get());
-
-	m_pServer = std::move(m_pBuilder->BuildAndStart());
-	std::thread th(&grpc::Server::Wait, m_pServer.get());
-	th.detach();
+	GetServiceManager()->StartServiceEntryPoint();
 }
 
