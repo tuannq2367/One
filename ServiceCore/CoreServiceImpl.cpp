@@ -74,3 +74,20 @@ CoreServiceImpl::CoreServiceImpl(ServicesManager* pServiceManager):
 		return grpc::Status(grpc::StatusCode::UNAVAILABLE, "KeepAlive Fail");
 	}
 }
+
+::grpc::Status CoreServiceImpl::ShutdownService(::grpc::ServerContext* context, const ::google::protobuf::Int32Value* request, ::google::protobuf::BoolValue* response)
+{
+	assert(context);
+	auto metadata = context->client_metadata();
+	auto it = metadata.find("token");
+	if (it == metadata.end())
+	{
+		response->set_value(false);
+		return grpc::Status(grpc::StatusCode::NOT_FOUND, "KeepAlive Fail, not found token");
+	}
+
+	std::string token(it->second.data(), it->second.length());
+	m_pServiceManager->DeactiveService(token);
+	response->set_value(true);
+	return grpc::Status(grpc::StatusCode::OK, "OK");
+}

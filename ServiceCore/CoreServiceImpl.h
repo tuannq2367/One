@@ -10,6 +10,7 @@ public:
 	~CoreServiceImpl() = default;
 	virtual ::grpc::Status RegisterService(::grpc::ServerContext* context, const ::One::ServiceInfo* request, ::google::protobuf::BoolValue* response);
 	virtual ::grpc::Status KeepAliveService(::grpc::ServerContext* context, const ::One::KeepAlive* request, ::google::protobuf::BoolValue* response);
+	virtual ::grpc::Status ShutdownService(::grpc::ServerContext* context, const ::google::protobuf::Int32Value* request, ::google::protobuf::BoolValue* response);
 private:
 	ServicesManager* m_pServiceManager;
 };

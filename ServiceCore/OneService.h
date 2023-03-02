@@ -21,24 +21,28 @@ public:
 	OneService(const std::string& token, const std::string& serviceName, int mPort, const std::string& mHost, int sPort, uint32_t security, uint32_t type);
 	~OneService();
 
-	void InstallService(grpc::Service* pService);
-
 	virtual BOOL InitInstance();
-	
 	virtual BOOL ExitInitInstance();
+	void InstallService(grpc::Service* pService);
 	void Stop();
+
+	const std::string& GetServiceName() const { return m_strServiceName; };
+	const std::string& GetDescriptions() const { return m_strDescriptions; };
+	const std::string& GetManagerHost() const { return m_mHost; };
+	virtual const std::string& QueryStatus() const;
 
 	static void StartService(OneService*& pService);
 protected:
 	BOOL ValidateService();
 	BOOL InitCommunication();
 	virtual void Run();
+	std::string m_strStatus{ "OK" };
 private:
 	const std::string m_strToken;
 	const std::string m_strServiceName;
-	std::string m_strDescriptions{"This is descriptions for service"};
-	int m_mPort;
+	const std::string m_strDescriptions{"This is descriptions for service"};
 	const std::string m_mHost;
+	int m_mPort;
 	int m_sPort;
 	uint32_t m_security;
 	uint32_t m_type;

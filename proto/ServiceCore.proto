@@ -27,6 +27,7 @@ message ServiceInfo {
 service CoreService {
 	rpc KeepAliveService(KeepAlive ) returns(.google.protobuf.BoolValue){}
 	rpc RegisterService(ServiceInfo ) returns (.google.protobuf.BoolValue){}
+	rpc ShutdownService(.google.protobuf.Int32Value) returns  (.google.protobuf.BoolValue){}
 }
 
 service ServiceControl {

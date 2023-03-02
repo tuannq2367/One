@@ -40,7 +40,7 @@ BOOL OneService::InitInstance()
 void OneService::KeepAlive()
 {
 	One::KeepAlive keepAlive;
-	keepAlive.set_status("OK");
+	keepAlive.set_status(QueryStatus());
 	keepAlive.set_seq(++m_nSequenceNumber);
 
 	if (!m_pStub->ServiceKeepAlive(keepAlive))
@@ -87,6 +87,11 @@ void OneService::Stop()
 		m_pServer->Shutdown();
 		m_pServer.reset();
 	}
+}
+
+const std::string& OneService::QueryStatus() const
+{
+	return m_strStatus;
 }
 
 void OneService::StartService(OneService*& pService)

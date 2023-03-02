@@ -77,7 +77,7 @@ bool ServicesManager::DeactiveService(const std::string& token)
 	}
 	
 	NotifyServiceRemove(it->second);
-	m_activeServices.erase(it);
+	m_activeServices.erase(token);
 	m_pTokensPool->RevokeToken(token);
 	
 	return true;
