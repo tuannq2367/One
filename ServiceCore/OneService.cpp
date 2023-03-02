@@ -94,6 +94,16 @@ const std::string& OneService::QueryStatus() const
 	return m_strStatus;
 }
 
+int OneService::GetApiVersion()
+{
+	return 1;
+}
+
+const std::string& OneService::GetApiDescription() const
+{
+	return "This API query data from Server OPCUA";
+}
+
 void OneService::StartService(OneService*& pService)
 {
 	if (!pService)
@@ -131,15 +141,12 @@ BOOL OneService::ValidateService()
 	info.set_bindport(m_sPort);
 	info.set_description(m_strDescriptions);
 	info.set_url("localhost");
-	info.set_apiinfo("This API query data from Server OPCUA");
-	info.set_apiversion(1);
+	info.set_apiinfo(GetApiDescription());
+	info.set_apiversion(GetApiVersion());
 	info.set_license("ATS-License 4.0");
 	info.set_type(m_type);
 	info.set_security(m_security);
-	//std::string m_strToken;
-	
-	uint32_t m_security{0};
-	uint32_t m_type{0};
+
 	if (!m_pStub->RegisterService(info))
 		return FALSE;
 

@@ -30,17 +30,18 @@ public:
 	const std::string& GetDescriptions() const { return m_strDescriptions; };
 	const std::string& GetManagerHost() const { return m_mHost; };
 	virtual const std::string& QueryStatus() const;
-
+	virtual int GetApiVersion();
+	virtual const std::string& GetApiDescription() const;
 	static void StartService(OneService*& pService);
 protected:
 	BOOL ValidateService();
 	BOOL InitCommunication();
 	virtual void Run();
 	std::string m_strStatus{ "OK" };
+	std::string m_strDescriptions{ "This is descriptions for service" };
 private:
 	const std::string m_strToken;
 	const std::string m_strServiceName;
-	const std::string m_strDescriptions{"This is descriptions for service"};
 	const std::string m_mHost;
 	int m_mPort;
 	int m_sPort;
