@@ -2,6 +2,7 @@
 #include "ServiceCoreExport.h"
 #include <memory>
 #include <unordered_map>
+#include <mutex>
 
 typedef struct CoreServiceInfo CoreServiceInfo;
 
@@ -30,12 +31,14 @@ public:
 	int GetServiceEntryPort() { return ServiceEntryPort; }
 	void AttachObserver(ServiceObserver* pObs);
 	void DetachObserver(ServiceObserver* pObs);
+	void CheckServicesTimeout();
 
-	static bool CheckServiceTimeout(const CoreServiceInfo& info);
+	static bool IsServiceTimeout(const CoreServiceInfo& info);
 	static ServicesManager* Instance();
 	static void Create();
 	static void Destroy();
 private:
+	std::mutex m_mutex;
 	void NotifyServiceAdd(const CoreServiceInfo& info);
 	void NotifyServiceRemove(const CoreServiceInfo& info);
 	void NotifyServiceChange(const CoreServiceInfo& info);

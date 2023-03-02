@@ -198,6 +198,7 @@
     </ClCompile>
     <ClCompile Include="CoreServiceImpl.cpp" />
     <ClCompile Include="OneService.cpp" />
+    <ClCompile Include="OneTimer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -221,6 +222,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Observers.h" />
     <ClInclude Include="OneService.h" />
+    <ClInclude Include="OneTimer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ServiceControlImpl.h" />

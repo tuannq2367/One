@@ -57,7 +57,10 @@ bool ServicesManager::ActiveService(std::string& token, const CoreServiceInfo& i
 	if (!m_pTokensPool->ActiveToken(token))
 		return false;
 
-	m_activeServices.emplace(token, info);
+	{
+		std::unique_lock<std::mutex> _lock(m_mutex);
+		m_activeServices.emplace(token, info);
+	}
 
 	NotifyServiceAdd(info);
 	return true;
@@ -65,9 +68,13 @@ bool ServicesManager::ActiveService(std::string& token, const CoreServiceInfo& i
 
 bool ServicesManager::DeactiveService(const std::string& token)
 {
-	auto it = m_activeServices.find(token);
-	if (it == m_activeServices.end())
-		return false;
+	std::unordered_map<std::string, CoreServiceInfo>::iterator it;
+	{
+		std::unique_lock<std::mutex> _lock(m_mutex);
+		it = m_activeServices.find(token);
+		if (it == m_activeServices.end())
+			return false;
+	}
 	
 	NotifyServiceRemove(it->second);
 	m_activeServices.erase(it);
@@ -78,9 +85,13 @@ bool ServicesManager::DeactiveService(const std::string& token)
 
 bool ServicesManager::KeepAliveService(const std::string& token, const std::string& status, uint64_t seq)
 {
-	auto it = m_activeServices.find(token);
-	if (it == m_activeServices.end())
-		return false;
+	std::unordered_map<std::string, CoreServiceInfo>::iterator it;
+	{
+		std::unique_lock<std::mutex> _lock(m_mutex);
+		it = m_activeServices.find(token);
+		if (it == m_activeServices.end())
+			return false;
+	}
 
 	CoreServiceInfo& info = it->second;
 	info.timestamp = time(0);
@@ -132,15 +143,33 @@ void ServicesManager::DetachObserver(ServiceObserver* pObs)
 	}
 }
 
-bool ServicesManager::CheckServiceTimeout(const CoreServiceInfo& info)
+void ServicesManager::CheckServicesTimeout()
 {
-	time_t now;
-	localtime(&now);
+	std::unique_lock<std::mutex> _lock(m_mutex);
+	auto it = m_activeServices.begin();
+	while (it != m_activeServices.end())
+	{
+		if (IsServiceTimeout(it->second))
+		{
+			NotifyServiceRemove(it->second);
+			m_pTokensPool->RevokeToken(it->first);
+			m_activeServices.erase(it++);
+		}
+		else
+		{
+			it++;
+		}
+	}
+}
 
-	if (now - info.timestamp > SERVICE_TIME_OUT)
-		return false;
+bool ServicesManager::IsServiceTimeout(const CoreServiceInfo& info)
+{
+	time_t now = time(0);
 
-	return true;
+	if (difftime(now, info.timestamp) > SERVICE_TIME_OUT)
+		return true;
+
+	return false;
 }
 
 ServicesManager* ServicesManager::_instance = nullptr;

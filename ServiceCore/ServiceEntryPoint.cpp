@@ -17,11 +17,11 @@ ServiceEntryPoint::~ServiceEntryPoint()
 	}
 }
 
-void ServiceEntryPoint::Start(int nPort)
+bool ServiceEntryPoint::Start(int nPort)
 {
 	if (isRunning)
 	{
-		return;
+		return false;
 	}else {
 		isRunning = true;
 	}
@@ -42,8 +42,20 @@ void ServiceEntryPoint::Start(int nPort)
 	m_pBuilder->RegisterService(m_pServiceImpl.get());
 
 	m_pServer = std::move(m_pBuilder->BuildAndStart());
-	std::thread th(&grpc::Server::Wait, m_pServer.get());
-	th.detach();
+	if (m_pServer)
+	{
+		std::thread th(&grpc::Server::Wait, m_pServer.get());
+		th.detach();
+
+		return true;
+	}
+	else
+	{
+		isRunning = false;
+		return false;
+	}
+
+	return false;
 }
 
 void ServiceEntryPoint::Stop()

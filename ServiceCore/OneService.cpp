@@ -2,6 +2,8 @@
 #include "OneService.h"
 #include "ServiceCoreStub.h"
 #include "ServiceControlImpl.h"
+#include "OneTimer.h"
+
 #include <grpcpp/grpcpp.h>
 
 OneService::OneService(const std::string& token, const std::string& serviceName, int mPort, const std::string& mHost, int sPort, uint32_t security, uint32_t type):
@@ -30,7 +32,6 @@ BOOL OneService::InitInstance()
 	addr += std::to_string(m_sPort);
 	m_pBuilder.reset(new grpc::ServerBuilder);
 	m_pBuilder->AddListeningPort(addr, grpc::InsecureServerCredentials());
-
 	m_pServiceControl.reset(new ServiceControlImpl);
 	m_pBuilder->RegisterService(m_pServiceControl.get());
 	return TRUE;
@@ -39,31 +40,34 @@ BOOL OneService::InitInstance()
 void OneService::KeepAlive()
 {
 	One::KeepAlive keepAlive;
-	int seq = 1;
 	keepAlive.set_status("OK");
-	while(true)
-	{
-		keepAlive.set_seq(seq++);
-		if (!m_pStub->ServiceKeepAlive(keepAlive))
-			break;
-		//printf("KeepAlive ...\n");
-		Sleep(2000);
-	}
+	keepAlive.set_seq(++m_nSequenceNumber);
 
-	// Main service die, Restart service
-	Stop();
+	if (!m_pStub->ServiceKeepAlive(keepAlive))
+		Stop();
 }
 
 void OneService::Run()
 {
 	if (!ValidateService())
+	{	
 		return;
+	}
+	std::unique_ptr<OneTimer> keepAliveTimer;
+	keepAliveTimer = std::make_unique<OneTimer>(2/*2 second*/, true, [this]()
+		{
+			KeepAlive();
+		});
 
-	std::thread th(&OneService::KeepAlive, this);
-	th.detach();
+	keepAliveTimer->Start();
 
 	m_pServer = std::move(m_pBuilder->BuildAndStart());
-	m_pServer->Wait();
+	if(m_pServer)
+	{
+		m_pServer->Wait();
+	}
+
+	keepAliveTimer->Stop();
 }
 
 BOOL OneService::ExitInitInstance()
@@ -78,9 +82,11 @@ BOOL OneService::ExitInitInstance()
 
 void OneService::Stop()
 {
-	assert(m_pServer);
-	m_pServer->Shutdown();
-	m_pServer.reset();
+	if(m_pServer)
+	{
+		m_pServer->Shutdown();
+		m_pServer.reset();
+	}
 }
 
 void OneService::StartService(OneService*& pService)

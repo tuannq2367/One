@@ -15,7 +15,7 @@ public:
 	ServiceEntryPoint();
 	~ServiceEntryPoint();
 
-	void Start(int nPort);
+	bool Start(int nPort);
 	void Stop();
 private:
 	std::atomic_bool isRunning{ false };

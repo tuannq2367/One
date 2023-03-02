@@ -32,6 +32,7 @@ public:
 protected:
 	BOOL ValidateService();
 	BOOL InitCommunication();
+	virtual void Run();
 private:
 	const std::string m_strToken;
 	const std::string m_strServiceName;
@@ -41,11 +42,11 @@ private:
 	int m_sPort;
 	uint32_t m_security;
 	uint32_t m_type;
+	uint64_t m_nSequenceNumber{0};
 	void KeepAlive();
 	std::unique_ptr <grpc::Server> m_pServer;
 	std::unique_ptr <grpc::ServerBuilder> m_pBuilder;
 	std::unique_ptr<ServiceCoreStub> m_pStub;
 	std::unique_ptr<ServiceControlImpl> m_pServiceControl;
-	virtual void Run();
 };
 

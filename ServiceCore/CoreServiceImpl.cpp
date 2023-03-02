@@ -42,7 +42,7 @@ CoreServiceImpl::CoreServiceImpl(ServicesManager* pServiceManager):
 	}
 	else
 	{
-		return grpc::Status(grpc::StatusCode::ABORTED, "Register Fail");
+		return grpc::Status(grpc::StatusCode::UNAVAILABLE, "Register Fail");
 	}
 }
 
@@ -71,6 +71,6 @@ CoreServiceImpl::CoreServiceImpl(ServicesManager* pServiceManager):
 	}
 	else
 	{
-		return grpc::Status(grpc::StatusCode::ABORTED, "KeepAlive Fail");
+		return grpc::Status(grpc::StatusCode::UNAVAILABLE, "KeepAlive Fail");
 	}
 }

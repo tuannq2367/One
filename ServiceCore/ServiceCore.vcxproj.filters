@@ -51,6 +51,9 @@
     <ClCompile Include="ServiceEntryPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OneTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ServiceCore.def">
@@ -104,6 +107,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ServiceEntryPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OneTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
