@@ -49,4 +49,6 @@ private:
 	CComboBox m_ctrlServiceList;
 public:
 	afx_msg void OnSelchangeComboSelectService();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	virtual void PostNcDestroy();
 };

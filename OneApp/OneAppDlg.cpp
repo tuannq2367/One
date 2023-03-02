@@ -19,7 +19,7 @@
 #endif
 
 // OneAppDlg dialog
-
+#define ID_TIMER_CHECK_SERVICE 100
 #define WM_SERVICE_MODIFY 1110
 #define SERVICE_ADDED 0
 #define SERVICE_REMOVED 1
@@ -149,6 +149,7 @@ BEGIN_MESSAGE_MAP(OneAppDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_START_SERVICE, &OneAppDlg::OnBnClickedBtnStartService)
 	ON_MESSAGE(WM_SERVICE_MODIFY, &OneAppDlg::OnServiceModify)
 	ON_CBN_SELCHANGE(IDC_COMBO_SELECT_SERVICE, &OneAppDlg::OnSelchangeComboSelectService)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -167,6 +168,8 @@ BOOL OneAppDlg::OnInitDialog()
 	InitReportControl();
 
 	InitServiceList();
+
+	SetTimer(ID_TIMER_CHECK_SERVICE,2500, nullptr);
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -323,4 +326,25 @@ void OneAppDlg::OnSelchangeComboSelectService()
 	int ind = m_ctrlServiceList.GetCurSel();
 	int nPort = m_ctrlServiceList.GetItemData(ind);
 	SetDlgItemText(IDC_EDIT_PORT, std::to_wstring(nPort).c_str());
+}
+
+
+void OneAppDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: Add your message handler code here and/or call default
+	if (nIDEvent == ID_TIMER_CHECK_SERVICE)
+	{
+		GetServiceManager()->CheckServicesTimeout();
+	} else
+	{	
+		__super::OnTimer(nIDEvent);
+	}
+}
+
+
+void OneAppDlg::PostNcDestroy()
+{
+	// TODO: Add your specialized code here and/or call the base class
+	KillTimer(ID_TIMER_CHECK_SERVICE);
+	__super::PostNcDestroy();
 }
